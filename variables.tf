@@ -27,10 +27,6 @@ variable "key_name" {
   description = "name of the Key Pair used to connect to instance"
 }
 
-variable "server_names" {
-  type = list(string)
-}
-
 variable "min_size" {
   type = string
 }

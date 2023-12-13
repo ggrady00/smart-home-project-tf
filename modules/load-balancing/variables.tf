@@ -9,15 +9,3 @@ variable "public_subnets" {
 variable "vpc_id" {
   type = string
 }
-
-variable "lighting_server_id" {
-  type = string
-}
-
-variable "heating_server_id" {
-  type = string
-}
-
-variable "status_server_id" {
-  type = string
-}

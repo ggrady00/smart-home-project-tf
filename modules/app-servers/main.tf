@@ -14,19 +14,6 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "server" {
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.instance_type
-  subnet_id                   = var.public_subnets[count.index]
-  key_name                    = var.key_name
-  associate_public_ip_address = true
-  vpc_security_group_ids      = var.security_group_ids
-  count                       = length(var.public_subnets)
-
-  tags = {
-    Name = var.server_names[count.index]
-  }
-}
 
 resource "aws_launch_template" "services" {
   count         = length(var.ami_id)
@@ -38,6 +25,7 @@ resource "aws_launch_template" "services" {
     associate_public_ip_address = true
     security_groups             = var.security_group_ids
   }
+  user_data = base64encode(templatefile("user-data.sh", {dns = var.lb_dns}))
 
 }
 

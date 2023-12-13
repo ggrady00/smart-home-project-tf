@@ -17,9 +17,6 @@ variable "security_group_ids" {
   description = "list of security groups to apply to instance"
 }
 
-variable "server_names" {
-  type = list(string)
-}
 
 variable "max_size" {
   type = string
@@ -43,4 +40,8 @@ variable "ami_id" {
 
 variable "autoscaling_group_name" {
   type = list(string)
+}
+
+variable "lb_dns" {
+  type = string
 }

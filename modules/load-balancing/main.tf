@@ -39,25 +39,6 @@ resource "aws_lb_target_group" "status" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "lighting" {
-  target_group_arn = aws_lb_target_group.lighting.arn
-  target_id        = var.lighting_server_id
-  port             = 3000
-}
-
-resource "aws_lb_target_group_attachment" "heating" {
-  target_group_arn = aws_lb_target_group.heating.arn
-  target_id        = var.heating_server_id
-  port             = 3000
-}
-
-resource "aws_lb_target_group_attachment" "status" {
-  target_group_arn = aws_lb_target_group.status.arn
-  target_id        = var.status_server_id
-  port             = 3000
-}
-
-
 resource "aws_lb_listener" "services" {
   load_balancer_arn = aws_lb.lb.arn
   port              = 80
