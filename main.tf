@@ -13,12 +13,22 @@ module "security" {
 }
 
 module "server" {
-  source             = "./modules/app-servers"
-  instance_type      = var.instance_type
-  security_group_ids = module.security.security_group_ids
-  key_name           = var.key_name
-  public_subnets     = module.network.public_subnets
-  server_names       = var.server_names
+  source                 = "./modules/app-servers"
+  instance_type          = var.instance_type
+  security_group_ids     = module.security.security_group_ids
+  key_name               = var.key_name
+  public_subnets         = module.network.public_subnets
+  server_names           = var.server_names
+  min_size               = var.min_size
+  max_size               = var.max_size
+  desired_capacity       = var.desired_capacity
+  target_group_arn       = module.load_balancer.tg_arn
+  ami_id                 = var.ami_id
+  autoscaling_group_name = var.autoscaling_group_name
+}
+
+module "database" {
+  source = "./modules/database"
 }
 
 module "load_balancer" {

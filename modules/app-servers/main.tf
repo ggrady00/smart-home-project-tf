@@ -28,28 +28,34 @@ resource "aws_instance" "server" {
   }
 }
 
-resource "aws_dynamodb_table" "lighting" {
-  name           = "Lighting"
-  read_capacity  = 5
-  write_capacity = 5
-  hash_key       = "id"
+resource "aws_launch_template" "services" {
+  count         = length(var.ami_id)
+  image_id      = var.ami_id[count.index]
+  instance_type = var.instance_type
+  key_name      = var.key_name
 
-  attribute {
-    name = "id"
-    type = "N"
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups             = var.security_group_ids
   }
 
 }
 
-resource "aws_dynamodb_table" "heating" {
-  name           = "heating"
-  read_capacity  = 5
-  write_capacity = 5
-  hash_key       = "id"
-
-  attribute {
-    name = "id"
-    type = "N"
+resource "aws_autoscaling_group" "services" {
+  name                = var.autoscaling_group_name[count.index]
+  count               = length(var.ami_id)
+  max_size            = var.max_size
+  min_size            = var.min_size
+  desired_capacity    = var.desired_capacity
+  vpc_zone_identifier = var.public_subnets
+  launch_template {
+    id      = aws_launch_template.services[count.index].id
+    version = "$Latest"
   }
+}
 
+resource "aws_autoscaling_attachment" "services" {
+  count                  = length(var.ami_id)
+  autoscaling_group_name = aws_autoscaling_group.services[count.index].id
+  lb_target_group_arn    = var.target_group_arn[count.index]
 }

@@ -30,3 +30,20 @@ variable "key_name" {
 variable "server_names" {
   type = list(string)
 }
+
+variable "min_size" {
+  type = string
+}
+variable "max_size" {
+  type = string
+}
+variable "desired_capacity" {
+  type = string
+}
+variable "ami_id" {
+  type = list(string)
+}
+
+variable "autoscaling_group_name" {
+  type = list(string)
+}
